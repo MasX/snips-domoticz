@@ -17,7 +17,7 @@ class Domoticz(HermesSnipsApp):
                                    'I received OpenShutters')
 
     @intent('MasX:CloseShutters')
-    def open_shutters(self, hermes, intent_message):
+    def close_shutters(self, hermes, intent_message):
         hermes.publish_end_session(intent_message.session_id,
                                    'I received CloseShutters')
 
