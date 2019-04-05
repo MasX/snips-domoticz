@@ -40,8 +40,7 @@ class Domoticz(HermesSnipsApp):
                                        'Had an issue closing the shutters.')
 
     def set_shutter_level(self, hostname, switch_no, level):
-        r = requests.get("%s/json.htm?type=command&param=switchlight&idx=%s&switchcmd=Set%20Level&level=%s") \
-            % (hostname, switch_no, level)
+        r = requests.get("{}/json.htm?type=command&param=switchlight&idx={}&switchcmd=Set%20Level&level={}").format(hostname, switch_no, level)
         return r.status_code == 200
 
 
