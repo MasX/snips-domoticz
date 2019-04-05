@@ -7,6 +7,7 @@ https://snipskit.readthedocs.io/
 """
 from snipskit.hermes.apps import HermesSnipsApp
 from snipskit.hermes.decorators import intent
+from snipskit.config import AppConfig
 import requests
 
 
