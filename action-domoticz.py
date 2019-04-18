@@ -15,34 +15,29 @@ class Domoticz(HermesSnipsApp):
 
     @intent('MasX:OpenShutters')
     def open_shutters(self, hermes, intent_message):
-        app_config = AppConfig()
-        hostname = app_config['secret']['hostname']
-        switch_no = app_config['secret']['switch_no']
-        success = self.set_shutter_level(hostname, switch_no, 1)
-        if success:
+        if self.set_shutter_level(1):
             hermes.publish_end_session(intent_message.session_id,
-                                       'Shutters opened.')
+                                        'Shutters opened.')
         else:
             hermes.publish_end_session(intent_message.session_id,
-                                       'Had an issue opening the shutters.')
+                                       'Encountered an issue opening the shutters.')
 
     @intent('MasX:CloseShutters')
     def close_shutters(self, hermes, intent_message):
-        app_config = AppConfig()
-        hostname = app_config['secret']['hostname']
-        switch_no = app_config['secret']['switch_no']
-        success = self.set_shutter_level(hostname, switch_no, 99)
-        if success:
+        if self.set_shutter_level(99):
             hermes.publish_end_session(intent_message.session_id,
                                        'Shutters closed.')
         else:
             hermes.publish_end_session(intent_message.session_id,
-                                       'Had an issue closing the shutters.')
+                                       'Encountered an issue closing the shutters.')
 
-    def set_shutter_level(self, hostname, switch_no, level):
-        r = requests.get("{}/json.htm?type=command&param=switchlight&idx={}&switchcmd=Set%20Level&level={}".format(hostname, switch_no, level), verify=False)
+    def set_shutter_level(self, level):
+        hostname = self.config['secret']['hostname']
+        switch_no = self.config['secret']['switch_no']
+        r = requests.get("{}/json.htm?type=command&param=switchlight&idx={}&switchcmd=Set%20Level&level={}"
+                         .format(hostname, switch_no, level), verify=False)
         return r.status_code == 200
 
 
 if __name__ == "__main__":
-    Domoticz()
+    Domoticz(config=AppConfig())
